@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>東森國際股份有限公司 - 倉儲事業部新進人員穀倉作業安全測驗</title>
+    <title>倉儲事業部-新進人員穀倉作業安全測驗</title>
     <style>
         :root {
             --primary-color: #0056b3;
@@ -313,7 +313,7 @@ function startExam() {
     const name = document.getElementById('username').value.trim();
     const empId = document.getElementById('empId').value.trim();
     if (!name || !empId) {
-        alert('請填寫姓名與工號！');
+        alert('請填寫姓名與員工編號！');
         return;
     }
     currentUser = { name, empId };
@@ -492,7 +492,7 @@ function exportToCSV() {
     }
 
     // 建立 CSV 欄位抬頭
-    let csvContent = "姓名,工號,交卷時間,分數,測驗結果,切換視窗次數\n";
+    let csvContent = "姓名,員工編號,交卷時間,分數,測驗結果,切換視窗次數\n";
 
     // 填入同仁數據
     records.forEach(r => {
