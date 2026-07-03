@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>東森國際股份有限公司 - 倉儲事業部新進人員穀倉作業安全測驗</title>
+    <style>
+        :root {
+            --primary-color: #0056b3;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --bg-color: #f8f9fa;
+        }
+        body {
+            font-family: "Microsoft JhengHei", Arial, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            text-align: center;
+            color: var(--primary-color);
+        }
+        .meta-info {
+            display: flex;
+            justify-content: space-between;
+            background: #e9ecef;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .btn:hover { background-color: #004085; }
+        .hidden { display: none !important; }
+        .option-label {
+            display: block;
+            padding: 12px;
+            background: #f1f3f5;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+        }
+        .option-label:hover { background: #e2e6ea; }
+        input[type="radio"] { margin-right: 10px; }
+        .question-text {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .admin-table th, .admin-table td {
+            border: 1px solid #dee2e6;
+            padding: 12px;
+            text-align: left;
+        }
+        .admin-table th { background-color: #f1f3f5; }
+        .pass { color: var(--success-color); font-weight: bold; }
+        .fail { color: var(--danger-color); font-weight: bold; }
+        
+        .admin-trigger-zone {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px dashed #ddd;
+            text-align: center;
+        }
+        .admin-input-group {
+            max-width: 300px;
+            margin: 10px auto;
+            display: flex;
+            gap: 5px;
+        }
+        .cheat-ban {
+            background-color: #fff5f5;
+            border: 2px solid var(--danger-color);
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+            color: var(--danger-color);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <div id="examSection">
+        <div id="welcomePage">
+            <h1>穀倉作業一般安全措施及緊急應變測驗</h1>
+            <p style="line-height: 1.6; color: #555;">
+                本測驗旨在強化新進同仁對於穀倉作業安全的工安概念。請確實理解文案內容後誠實應考。<br>
+                <b style="color: var(--danger-color);">⚠️ 嚴格防弊機制宣告：</b><br>
+                本測驗已啟用防切換視窗偵測。作答期間<b>切換視窗或離開頁面者，系統將立即判定作弊，強制關閉考試畫面並取消考試資格（成績以 0 分計入後台）。請勿嘗試切換分頁或查詢資料！</b>
+            </p>
+            <hr>
+            <div class="form-group">
+                <label for="username">員工姓名：</label>
+                <input type="text" id="username" placeholder="請輸入完整姓名" required>
+            </div>
+            <div class="form-group">
+                <label for="empId">員工編號：</label>
+                <input type="text" id="empId" placeholder="請輸入員工編號" required>
+            </div>
+            <button class="btn" onclick="startExam()">開始測驗</button>
+        </div>
+
+        <div id="quizPage" class="hidden">
+            <div class="meta-info">
+                <span id="displayNav">題目：1 / 50</span>
+                <span id="timer" style="color: var(--danger-color);">剩餘時間：50:00</span>
+            </div>
+            <div id="questionContainer">
+                </div>
+            <button class="btn" id="nextBtn" onclick="nextQuestion()">下一題 (送出後不可修改)</button>
+        </div>
+
+        <div id="resultPage" class="hidden">
+            <h2>測驗結果</h2>
+            <div id="resultSummary" style="text-align: center; font-size: 20px; margin: 30px 0;"></div>
+            <button class="btn" onclick="restartQuiz()">返回首頁</button>
+        </div>
+
+        <div id="banPage" class="hidden">
+            <div class="cheat-ban">
+                <h2 style="color: var(--danger-color); margin-top: 0;">🚫 考試資格已被取消 🚫</h2>
+                <p style="font-size: 18px; font-weight: bold; line-height: 1.8;">
+                    系統偵測到您在考試期間離開或切換視窗。<br>
+                    依據防弊規定，本場測驗已被強制終止，並取消您的應考資格。<br>
+                    此違規紀錄與 0 分成績已即時同步傳送至監考後台，請立刻通知現場負責主管。
+                </p>
+            </div>
+            <button class="btn" style="background-color: #6c757d;" onclick="restartQuiz()">返回首頁</button>
+        </div>
+    </div>
+
+    <div id="adminSection" class="hidden">
+        <hr style="margin-top: 40px; border-top: 3px double #0056b3;">
+        <h2>即時後台數據看板</h2>
+        <p>此處顯示所有考生的應考成績紀錄（資料儲存於本地瀏覽器）：</p>
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>姓名</th>
+                    <th>員工編號</th>
+                    <th>交卷時間</th>
+                    <th>分數</th>
+                    <th>結果</th>
+                    <th>切換視窗次數</th>
+                </tr>
+            </thead>
+            <tbody id="adminRecords">
+                <tr>
+                    <td colspan="6" style="text-align:center; color:#999;">目前尚無應考紀錄</td>
+                </tr>
+            </tbody>
+        </table>
+        <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap;">
+            <button class="btn" style="background-color: var(--success-color); margin: 0; flex: 1;" onclick="exportToCSV()">匯出所有成績</button>
+            <button class="btn" style="background-color: #6c757d; margin: 0;" onclick="clearRecords()">清除所有後台紀錄</button>
+            <button class="btn" style="background-color: #e67e22; margin: 0;" onclick="hideAdminSection()">隱藏後台面板</button>
+        </div>
+    </div>
+
+    <div id="lockZone" class="admin-trigger-zone">
+        <small style="color: #ccc; cursor: default;">系統維護區</small>
+        <div class="admin-input-group">
+            <input type="password" id="adminPwd" placeholder="請輸入管理員密碼" style="padding: 5px; font-size: 12px; border: 1px solid #ddd;">
+            <button onclick="unlockAdmin()" style="padding: 5px 10px; font-size: 12px; cursor: pointer;">解鎖後台</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const originalQuestions = [
+    { q: "本廠區的作業範圍不包含以下哪一個區域？", o: ["進倉碼頭卸船區", "穀倉機械塔", "出倉作業區", "遠洋深海捕撈區"], a: 3 },
+    { q: "關於「穀倉作業一般安全措施及緊急應變辦法」的修訂與頒佈實施，是由哪一個單位的權責主管負責？", o: ["總公司董事會", "倉儲事業部", "外部消防局", "船務代理公司"], a: 1 },
+    { q: "下列何者屬於穀倉火災原因中的「人為火源」？", o: ["鐵件或異物與機械碰撞磨擦", "軸承與皮帶連續磨擦", "乙炔熔切、焊接與吸菸", "破損電線及電纜"], a: 2 },
+    { q: "設備運轉時，因「鐵件或異物與機械碰撞磨擦」引發的火源屬於哪一類？", o: ["人為火源", "設備火源", "化學火源", "自然火源"], a: 1 },
+    { q: "為了減少粉塵外溢、降低塵爆風險，碼頭穀倉內設有何種系統設備？", o: ["高壓噴水系統", "集塵系統設備", "冷氣空調設備", "自動灑水裝置"], a: 1 },
+    { q: "為避免石塊與金屬等異物進入穀倉設備引發火花，穀倉機械塔內設有何種裝置？", o: ["篩選及磁性分離裝置設備", "自動防震裝置", "高壓清洗裝置", "溫度感應設備"], a: 0 },
+    { q: "穀倉機械塔內所使用的插座、燈具及開關，其安全防護等級有何要求？", o: ["僅需一般家用等級", "必須使用防塵等級以上設備", "具備防水等級即可", "無特殊規定"], a: 1 },
+    { q: "碼頭穀倉斗昇機設有何種裝置，用以防止皮帶偏向與機殼摩擦產生高溫而造成塵爆？", o: ["速度控制器", "皮帶偏向保護裝置", "洩爆口", "過載預防裝置"], a: 1 },
+    { q: "當斗昇機不幸發生塵爆時，廠區透過何種設施來引導塵爆產生之爆壓？", o: ["集塵器", "消防栓", "洩爆口", "防塵箱"], a: 2 },
+    { q: "輸送機及斗昇機的安全裝置，在何種狀況下會自動停止運轉？", o: ["運轉時間超過 1 小時", "當有人經過時", "上下滾輪轉速發生差異及運轉電流過高時", "粉塵濃度過低時"], a: 2 },
+    { q: "本公司劃分穀倉防爆危險區域是依據哪一項國家標準？", o: ["CNS 11009", "CNS 3376-10", "ISO 9001", "消防法規第 5 條"], a: 1 },
+    { q: "依危險區域劃分，「粉塵於作業環境下連續性存在，不可有火源」的區域（如倉筒內部）屬於哪一區？", o: ["20 區", "21 區", "22 區", "23 區"], a: 0 },
+    { q: "關於防爆危險區域的「21 區」，其空間範圍定義為何？", o: ["20 區週遭半徑三公尺外之開放空間", "離設備十公尺內的所有走道", "20 區週遭半徑三公尺內(粉塵主要洩漏點)", "機械塔內所有辦公區域"], a: 2 },
+    { q: "紙類、木製品、纖維產品等一般固體物質燃燒出剩餘物質的火災，屬於哪一類火災？", o: ["Ａ類普通火災", "Ｂ類油類火災", "Ｃ類電氣火災", "Ｄ類金屬火災"], a: 0 },
+    { q: "汽油、柴油、動植物油、食用油或瓦斯氣體引發的火災，屬於哪一類火災？", o: ["Ａ類普通火災", "Ｂ類油類火災", "Ｃ類電氣火災", "Ｄ類金屬火災"], a: 1 },
+    { q: "當通電中的電力設備、馬達或變壓器發生火災時，應歸類為哪一種火災？", o: ["Ａ類普通火災", "Ｂ類油類火災", "Ｃ類電氣火災", "Ｄ類金屬火災"], a: 2 },
+    { q: "面對「未斷電」的Ｃ類電氣火災，應使用何種滅火器滅火以策安全？", o: ["泡沫滅火器", "消防水柱", "乾粉及CO2滅火器", "特殊金屬滅火器"], a: 2 },
+    { q: "活性金屬（如鎂、鉀、鋰、鋯、鈦等）所引起的火災，屬於哪一類火災？", o: ["Ａ類普通火災", "Ｂ類油類火災", "Ｃ類電氣火災", "Ｄ類金屬火災"], a: 3 },
+    { q: "發生Ｄ類金屬火災時，下列哪一種滅火器具才是正確的選擇？", o: ["直接拉消防水栓噴水", "使用一般泡沫滅火器", "需依特定型號滅火器滅火", "使用隨行普通滅火器"], a: 2 },
+    { q: "日常民生用品中的非活性金屬製品若燃燒，應依據哪類火災之方式進行滅火？", o: ["僅能用 Ｄ 類", "依 ＡＢ 類火災滅火", "依 Ｃ 類火災滅火", "無法撲滅"], a: 1 },
+    { q: "關於本公司廠區內對「吸菸與飲酒」的相關規定，何者正確？", o: ["可以在機械塔外吸菸", "全面禁止吸菸，且工作前與期間禁止飲酒", "只要主管沒看到就可以吸菸", "飲酒只要不醉倒即可"], a: 1 },
+    { q: "為預防電線走火，下列哪一個區域「禁止連接電源線」進行個人電子用品充電或使用電爐？", o: ["辦公大樓", "進倉碼頭區", "穀倉機械塔內", "廠區外警衛室"], a: 2 },
+    { q: "關於作業場所保持乾淨整齊的規定，用畢的油污、紙屑、破布、手套應如何處理？", o: ["暫時堆放在滅火器旁邊", "直接丟入附近水溝", "用畢帶離，不堆置個人物品及雜物", "留在原地由下一班清理"], a: 2 },
+    { q: "以下哪一個地方或設備周圍，「嚴禁堆放物品」以防阻礙工安應變？", o: ["碼頭舷梯口", "滅火器、消防栓、配電盤及電容器周圍", "員工休息室的空櫃子", "廠區空地中央"], a: 1 },
+    { q: "更換下來的廢機油應該如何妥善處理？", o: ["注入廢油桶集中，不傾入水溝或任意放置", "直接倒入廁所馬桶沖走", "灑在周邊泥土上防塵", "與一般紙屑垃圾混在一起丟棄"], a: 0 },
+    { q: "在粉塵環境下，應使用何種工具來清潔機械塔作業區設備的粉塵？", o: ["用高壓橡膠水管沖洗", "用強力電風扇吹散", "應以吸塵器清潔", "使用竹掃把清掃"], a: 2 },
+    { q: "同仁進入本廠區作業場所內，基本必須配戴的個人防護具不包含以下哪一項？", o: ["安全帽", "安全鞋與反光背心", "高壓絕緣橡膠手套(一般作業)", "相應作業之護目鏡/耳塞"], a: 2 },
+    { q: "在執行兩米以上高架作業時，必須配戴何種專用防護具？", o: ["防塵面罩", "背負式安全帶", "護目鏡", "普通麻布手套"], a: 1 },
+    { q: "哪一組同仁在值勤時，「必須配戴隨行滅火器」？", o: ["總公司行政同仁", "吸卸穀機操作員、機械塔/保全人員、公務車司機、卸船管理員", "膳食廚房工作人員", "外包清潔人員"], a: 1 },
+    { q: "通道及人行上方場所進行作業時，範圍週邊應採取什麼措施防止人員、車輛突入？", o: ["派人在現場大聲喊叫", "設置三角錐、圍籬或警示帶進行作業區域區隔", "關閉所有出入口大門", "懸掛一般安全標語即可"], a: 1 },
+    { q: "廠內的通訊、廣播、消防警報系統、消防設備及急救箱，其檢查頻率為何？", o: ["每半年檢查一次", "每週檢查一次", "每月檢查", "每年春節前檢查"], a: 2 },
+    { q: "執行重大機械設備檢修前，必須經過誰的核准始得作業？", o: ["當班值班工程師", "機電組主管", "通報班班長", "保全人員"], a: 1 },
+    { q: "進行機械設備檢修時，正確的停機斷電程序順序為何？", o: ["掛籤上鎖→關閉設備電源→關閉現場開關", "關閉設備電源→掛籤上鎖→進行維修", "關閉現場開關→關閉設備電源→掛籤上鎖並確認斷電", "直接進行檢修作業"], a: 2 },
+    { q: "機械設備維修確認斷電後，圖控設備指示應改為什麼顏色代表維修中？", o: ["鮮紅色", "桃紅色", "亮綠色", "黃黑色"], a: 1 },
+    { q: "同仁進行設備巡查時，配戴何種儀器進行設備運作溫度測定，以及早發現異常？", o: ["熱顯像儀", "瓦斯偵測器", "照度計", "噪音計"], a: 0 },
+    { q: "電氣作業安全衛生規定中，關於維修作業之敘述，何者正確？", o: ["可一邊通電一邊迅速維修(活電作業)", "應斷電進行維修作業，禁止活電作業", "臨時延長線可以使用無防塵插頭", "電氣室高壓電盤檢修不需任何證照"], a: 1 },
+    { q: "高架作業規定中，高度在幾公尺以上即應配戴背負式安全帶，且扣環應繫於安全母索或固定設備上？", o: ["1 公尺", "1.5 公尺", "2 公尺", "5 公尺"], a: 2 },
+    { q: "動火作業開始前，同仁應依據哪一項文件執行環境與施工安全檢點並提出申請？", o: ["每日工作日誌", "財產損耗統計表", "『危險性作業安全檢查申請表』", "防颱動態通報單"], a: 2 },
+    { q: "在卸船作業期間，關於船艙口及卸船作業區的動火規定為何？", o: ["只要通風良好即可動火", "不得動火作業", "船長同意就可以動火", "僅限使用噴燈作業"], a: 1 },
+    { q: "卸船設備吊掛/舉物作業時，周圍與移動路徑下方，禁止人車停留。裝卸管理員必要時應如何處理？", o: ["拍照存證", "鳴哨驅離", "暫停設備運轉", "不予理會"], a: 1 },
+    { q: "進入局限空間（如船艙、倉筒儲料槽）清理作業時，應符合什麼人員配置與環境檢測條件？", o: ["一個人單決進去", "以四用氣體偵測器檢測氣體濃度安全無虞後，兩人一組方能進入", "只要攜帶強光探照燈即可", "只要戴防塵面罩即可"], a: 1 },
+    { q: "進行筒倉或儲料槽內局限空間檢修時，環境溫度應保持不超過幾度，且限用幾V的照明設備？", o: ["不超過 50 度，限用 110V", "不超過 40 度，僅限用 18V", "不超過 30 度，限用 220V", "無特別限制"], a: 1 },
+    { q: "檢查筒倉穀物狀況時，強光探照燈應該如何放置？", o: ["吊掛懸置於倉內", "置於倉口外，不懸倉內", "由作業人員抱在懷中進入", "放置於筒倉最底部"], a: 1 },
+    { q: "在局限或開放空間作業時，防塵/防爆電氣設備配線應符合 CNS 規定的何種配線包覆？", o: ["塑膠軟管包覆", "絕緣膠帶纏繞", "金屬管配線包覆", "直接裸線配線"], a: 2 },
+    { q: "廠區自衛消防編組的緊急應變分組中，最高「指揮官」依法規由誰擔任？", o: ["職安主管", "當班領班", "營運處經理", "總公司總經理"], a: 2 },
+    { q: "在緊急應變編組職掌中，負責「引導人員疏散撤離、保持安全門暢通、禁止搭乘電梯」的是哪一個班別？", o: ["通報班", "滅火班", "避難引導班", "緊急救護班"], a: 2 },
+    { q: "發生火災爆炸及人員傷亡事故的第一時間，現場作業同仁應首先採取什麼設備操作？", o: ["打開所有通風窗戶", "按下「緊急停止」按鈕，停止設備運轉", "跑去拿急救箱", "繼續操作"], a: 1 },
+    { q: "颱風來臨前，機電組應將吸/卸穀機移動至何處固定，以防強風吹襲倒塌？", o: ["移動至船艙正上方", "移至定位固定", "移置廠區外馬路上", "不需要移動"], a: 1 },
+    { q: "颱風來臨前，為了避免雷擊瞬間過大電流導致設備損壞，控制組應執行什麼安全措施？", o: ["開啟備用發電機", "關閉進/出倉作業電腦並切斷電源供應器", "保持電腦開機監控", "加強冷氣運轉"], a: 1 },
+    { q: "颱風防颱作業結束後應拍照紀錄，若不幸發生財產損失，應於颱風結束後幾小時內申報保險理賠？", o: ["12 小時內", "24 小時內", "48 小時內", "一週之內"], a: 1 }
+];
+
+let questions = [];
+let currentQuestionIndex = 0;
+let score = 0;
+let timerInterval;
+let timeLeft = 50 * 60; 
+let cheatCount = 0;
+let currentUser = { name: '', empId: '' };
+
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+function initQuestions() {
+    questions = JSON.parse(JSON.stringify(originalQuestions));
+    shuffle(questions);
+    questions.forEach(q => {
+        let correctText = q.o[q.a];
+        shuffle(q.o);
+        q.a = q.o.indexOf(correctText);
+    });
+}
+
+function unlockAdmin() {
+    const pwd = document.getElementById('adminPwd').value;
+    if (pwd === 'admin123') { 
+        document.getElementById('adminSection').classList.remove('hidden');
+        renderAdminRecords();
+        document.getElementById('adminPwd').value = '';
+        window.scrollTo(0, document.body.scrollHeight);
+    } else {
+        alert('密碼錯誤！無法開啟監考後台。');
+    }
+}
+
+function hideAdminSection() {
+    document.getElementById('adminSection').classList.add('hidden');
+}
+
+function startExam() {
+    const name = document.getElementById('username').value.trim();
+    const empId = document.getElementById('empId').value.trim();
+    if (!name || !empId) {
+        alert('請填寫姓名與工號！');
+        return;
+    }
+    currentUser = { name, empId };
+    cheatCount = 0;
+    currentQuestionIndex = 0;
+    score = 0;
+    timeLeft = 50 * 60;
+
+    initQuestions();
+    
+    document.getElementById('welcomePage').classList.add('hidden');
+    document.getElementById('banPage').classList.add('hidden');
+    document.getElementById('resultPage').classList.add('hidden');
+    document.getElementById('lockZone').classList.add('hidden'); 
+    document.getElementById('quizPage').classList.remove('hidden');
+    
+    startTimer();
+    renderQuestion();
+
+    window.addEventListener('blur', handleWindowBlur);
+}
+
+function handleWindowBlur() {
+    cheatCount++;
+    if (cheatCount > 2) {
+        triggerCheatBan();
+    } else {
+        alert(`⚠️ 系統警告：偵測到您離開考試視窗或切換分頁！\n此操作已被系統即時記錄並通報監考後台。請立即回到應考畫面專心作答，切勿再次違規，否則系統將直接取消您的考試資格！`);
+    }
+}
+
+function triggerCheatBan() {
+    clearInterval(timerInterval);
+    window.removeEventListener('blur', handleWindowBlur);
+
+    document.getElementById('quizPage').classList.add('hidden');
+    document.getElementById('banPage').classList.remove('hidden');
+    document.getElementById('lockZone').classList.remove('hidden'); 
+
+    let records = JSON.parse(localStorage.getItem('grain_quiz_records')) || [];
+    records.push({
+        name: currentUser.name,
+        empId: currentUser.empId,
+        time: new Date().toLocaleString(),
+        score: 0, 
+        status: '取消資格（作弊）',
+        cheat: cheatCount
+    });
+    localStorage.setItem('grain_quiz_records', JSON.stringify(records));
+}
+
+function startTimer() {
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        let minutes = Math.floor(timeLeft / 60);
+        let seconds = timeLeft % 60;
+        document.getElementById('timer').innerText = `剩餘時間：${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            alert('時間到！系統已自動幫您交卷。');
+            submitExam();
+        }
+    }, 1000);
+}
+
+function renderQuestion() {
+    const qData = questions[currentQuestionIndex];
+    document.getElementById('displayNav').innerText = `題目：${currentQuestionIndex + 1} / 50`;
+    
+    let html = `<div class="question-text">${currentQuestionIndex + 1}. ${qData.q}</div>`;
+    qData.o.forEach((option, idx) => {
+        html += `
+            <label class="option-label">
+                <input type="radio" name="quizOption" value="${idx}">
+                ${String.fromCharCode(65 + idx)}. ${option}
+            </label>
+        `;
+    });
+    document.getElementById('questionContainer').innerHTML = html;
+
+    if (currentQuestionIndex === questions.length - 1) {
+        document.getElementById('nextBtn').innerText = "最後一題，送出測驗";
+    } else {
+        document.getElementById('nextBtn').innerText = "下一題 (送出後不可修改)";
+    }
+}
+
+function nextQuestion() {
+    const selected = document.querySelector('input[name="quizOption"]:checked');
+    if (!selected) {
+        alert('請先選擇一個答案再前進下一題！');
+        return;
+    }
+
+    if (parseInt(selected.value) === questions[currentQuestionIndex].a) {
+        score += 2;
+    }
+
+    if (currentQuestionIndex < questions.length - 1) {
+        currentQuestionIndex++;
+        renderQuestion();
+    } else {
+        submitExam();
+    }
+}
+
+function submitExam() {
+    clearInterval(timerInterval);
+    window.removeEventListener('blur', handleWindowBlur);
+
+    const isPass = score >= 70;
+    const resultText = isPass ? '<span class="pass">恭喜通過測驗！</span>' : '<span class="fail">❌ 未通過測驗，請再接再厲。</span>';
+    
+    document.getElementById('quizPage').classList.add('hidden');
+    document.getElementById('resultPage').classList.remove('hidden');
+    document.getElementById('lockZone').classList.remove('hidden'); 
+    
+    document.getElementById('resultSummary').innerHTML = `
+        <h3>${currentUser.name} 同仁您好：</h3>
+        <p style="font-size:24px;">您的測驗分數為：<b>${score} 分</b></p>
+        <p>及格標準：70 分</p>
+        <p>${resultText}</p>
+    `;
+
+    let records = JSON.parse(localStorage.getItem('grain_quiz_records')) || [];
+    records.push({
+        name: currentUser.name,
+        empId: currentUser.empId,
+        time: new Date().toLocaleString(),
+        score: score,
+        status: isPass ? '通過' : '不通過',
+        cheat: cheatCount
+    });
+    localStorage.setItem('grain_quiz_records', JSON.stringify(records));
+}
+
+function renderAdminRecords() {
+    let records = JSON.parse(localStorage.getItem('grain_quiz_records')) || [];
+    const tbody = document.getElementById('adminRecords');
+    if (records.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#999;">目前尚無應考紀錄</td></tr>`;
+        return;
+    }
+    
+    let html = '';
+    records.forEach(r => {
+        let statusClass = '';
+        if(r.status === '通過') statusClass = 'pass';
+        else if(r.status === '不通過') statusClass = 'fail';
+        else statusClass = 'fail'; 
+        
+        let cheatStyle = r.cheat > 2 ? 'color:red; font-weight:bold; background-color:#ffebeb;' : 'color:orange;';
+        if(r.cheat == 0) cheatStyle = '';
+
+        html += `
+            <tr>
+                <td>${r.name}</td>
+                <td>${r.empId}</td>
+                <td>${r.time}</td>
+                <td><b>${r.score}</b></td>
+                <td class="${statusClass}">${r.status}</td>
+                <td style="${cheatStyle}">${r.cheat} 次</td>
+            </tr>
+        `;
+    });
+    tbody.innerHTML = html;
+}
+
+// ❗ 新增：匯出成績資料成 CSV 的核心 JavaScript 邏輯 ❗
+function exportToCSV() {
+    let records = JSON.parse(localStorage.getItem('grain_quiz_records')) || [];
+    if (records.length === 0) {
+        alert('目前尚無應考紀錄可以匯出！');
+        return;
+    }
+
+    // 建立 CSV 欄位抬頭
+    let csvContent = "姓名,工號,交卷時間,分數,測驗結果,切換視窗次數\n";
+
+    // 填入同仁數據
+    records.forEach(r => {
+        // 防止文字內部有逗號導致排版錯亂，使用雙引號包覆
+        let row = `"${r.name}","${r.empId}","${r.time}",${r.score},"${r.status}",${r.cheat}`;
+        csvContent += row + "\n";
+    });
+
+    // 使用 UTF-8 (帶 BOM 標頭 \uFEFF) 下載，確保全中文環境用 Excel 開啟不變亂碼
+    let blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+    let url = URL.createObjectURL(blob);
+    
+    // 建立隱藏的下載超連結
+    let link = document.createElement("a");
+    link.setAttribute("href", url);
+    
+    // 將檔名預設為「穀倉作業安全測驗成績單_當前日期」
+    let dateStr = new Date().toISOString().split('T')[0];
+    link.setAttribute("download", `穀倉作業安全測驗成績單_${dateStr}.csv`);
+    
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+function clearRecords() {
+    if (confirm('確定要刪除所有的歷史應考紀錄嗎？此動作無法復原。')) {
+        localStorage.removeItem('grain_quiz_records');
+        renderAdminRecords();
+    }
+}
+
+function restartQuiz() {
+    document.getElementById('resultPage').classList.add('hidden');
+    document.getElementById('banPage').classList.add('hidden');
+    document.getElementById('welcomePage').classList.remove('hidden');
+    document.getElementById('username').value = '';
+    document.getElementById('empId').value = '';
+}
+</script>
+
+</body>
+</html>
