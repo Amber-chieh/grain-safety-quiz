@@ -214,7 +214,60 @@
         </div>
     </div>
 </div>
+// ================= 🚫 防弊鎖定機制：禁止右鍵與常用快捷鍵 =================
+// 1. 禁用滑鼠右鍵選單
+document.addEventListener('contextmenu', function (e) {
+    e.preventDefault();
+    alert('⚠️ 系統提示：本測驗已啟用安全防護，禁用滑鼠右鍵。');
+});
 
+// 2. 禁用特定快捷鍵
+document.addEventListener('keydown', function (e) {
+    // 檢查是否按下 Ctrl (Windows) 或 Command (Mac)
+    const isCtrl = e.ctrlKey || e.metaKey;
+    // 檢查是否按下 Shift
+    const isShift = e.shiftKey;
+
+    // F12 鍵 (直接開啟開發者工具)
+    if (e.key === 'F12') {
+        e.preventDefault();
+        alert('⚠️ 系統提示：禁止開啟開發者工具！');
+        return;
+    }
+
+    if (isCtrl) {
+        // Ctrl + Shift + I (開發者工具)
+        // Ctrl + Shift + J (控制台)
+        // Ctrl + Shift + C (檢查元素)
+        if (isShift && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) {
+            e.preventDefault();
+            alert('⚠️ 系統提示：禁止開啟開發者輔助工具！');
+            return;
+        }
+
+        // Ctrl + U (檢視網頁原始碼)
+        if (e.key === 'U' || e.key === 'u') {
+            e.preventDefault();
+            alert('⚠️ 系統提示：禁止檢視網頁原始碼！');
+            return;
+        }
+
+        // Ctrl + S (儲存網頁)
+        if (e.key === 'S' || e.key === 's') {
+            e.preventDefault();
+            alert('⚠️ 系統提示：本測驗禁止下載或儲存網頁！');
+            return;
+        }
+
+        // Ctrl + P (列印網頁)
+        if (e.key === 'P' || e.key === 'p') {
+            e.preventDefault();
+            alert('⚠️ 系統提示：本測驗禁止列印或匯出 PDF！');
+            return;
+        }
+    }
+});
+// =====================================================================
 <script>
 const originalQuestions = [
     { q: "本廠區的作業範圍不包含以下哪一個區域？", o: ["進倉碼頭卸船區", "穀倉機械塔", "出倉作業區", "遠洋深海捕撈區"], a: 3 },
