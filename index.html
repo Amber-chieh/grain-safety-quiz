@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>東森國際股份有限公司 - 穀倉作業安全測驗系統</title>
+    <title>東森國際股份有限公司 - 倉儲事業部新進人員穀倉作業安全測驗</title>
     <style>
         :root {
             --primary-color: #0056b3;
@@ -132,8 +132,6 @@
             <h1>穀倉作業一般安全措施及緊急應變測驗</h1>
             <p style="line-height: 1.6; color: #555;">
                 本測驗旨在強化新進同仁對於穀倉作業安全的工安概念。請確實理解文案內容後誠實應考。<br>
-                <b style="color: #333;">📝 測驗說明：</b><br>
-                考試時間為 60 分鐘，共有 50 題，及格成績為 70 分（滿分為 100 分）。<br><br>
                 <b style="color: var(--danger-color);">⚠️ 嚴格防弊機制宣告：</b><br>
                 本測驗已啟用防切換視窗偵測。作答期間<b>切換視窗或離開頁面者，系統將立即判定作弊，強制關閉考試畫面並取消考試資格（成績以 0 分計入後台）。請勿嘗試切換分頁或查詢資料！</b>
             </p>
@@ -144,7 +142,7 @@
             </div>
             <div class="form-group">
                 <label for="empId">員工編號：</label>
-                <input type="text" id="empId" placeholder="請輸入工號" required>
+                <input type="text" id="empId" placeholder="請輸入員工編號" required>
             </div>
             <button class="btn" onclick="startExam()">開始測驗</button>
         </div>
@@ -152,7 +150,7 @@
         <div id="quizPage" class="hidden">
             <div class="meta-info">
                 <span id="displayNav">題目：1 / 50</span>
-                <span id="timer" style="color: var(--danger-color);">剩餘時間：60:00</span>
+                <span id="timer" style="color: var(--danger-color);">剩餘時間：50:00</span>
             </div>
             <div id="questionContainer">
                 </div>
@@ -180,13 +178,13 @@
 
     <div id="adminSection" class="hidden">
         <hr style="margin-top: 40px; border-top: 3px double #0056b3;">
-        <h2>📊 監考者即時後台數據看板</h2>
+        <h2>即時後台數據看板</h2>
         <p>此處顯示所有考生的應考成績紀錄（資料儲存於本地瀏覽器）：</p>
         <table class="admin-table">
             <thead>
                 <tr>
                     <th>姓名</th>
-                    <th>工號</th>
+                    <th>員工編號</th>
                     <th>交卷時間</th>
                     <th>分數</th>
                     <th>結果</th>
@@ -200,7 +198,7 @@
             </tbody>
         </table>
         <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap;">
-            <button class="btn" style="background-color: var(--success-color); margin: 0; flex: 1;" onclick="exportToCSV()">📥 匯出所有成績為 CSV 檔</button>
+            <button class="btn" style="background-color: var(--success-color); margin: 0; flex: 1;" onclick="exportToCSV()">匯出所有成績</button>
             <button class="btn" style="background-color: #6c757d; margin: 0;" onclick="clearRecords()">清除所有後台紀錄</button>
             <button class="btn" style="background-color: #e67e22; margin: 0;" onclick="hideAdminSection()">隱藏後台面板</button>
         </div>
@@ -215,6 +213,60 @@
     </div>
 </div>
 
+// ================= 🚫 防弊鎖定機制：禁止右鍵與常用快捷鍵 =================
+// 1. 禁用滑鼠右鍵選單
+document.addEventListener('contextmenu', function (e) {
+    e.preventDefault();
+    alert('⚠️ 系統提示：本測驗已啟用安全防護，禁用滑鼠右鍵。');
+});
+
+// 2. 禁用特定快捷鍵
+document.addEventListener('keydown', function (e) {
+    // 檢查是否按下 Ctrl (Windows) 或 Command (Mac)
+    const isCtrl = e.ctrlKey || e.metaKey;
+    // 檢查是否按下 Shift
+    const isShift = e.shiftKey;
+
+    // F12 鍵 (直接開啟開發者工具)
+    if (e.key === 'F12') {
+        e.preventDefault();
+        alert('⚠️ 系統提示：禁止開啟開發者工具！');
+        return;
+    }
+
+    if (isCtrl) {
+        // Ctrl + Shift + I (開發者工具)
+        // Ctrl + Shift + J (控制台)
+        // Ctrl + Shift + C (檢查元素)
+        if (isShift && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) {
+            e.preventDefault();
+            alert('⚠️ 系統提示：禁止開啟開發者輔助工具！');
+            return;
+        }
+
+        // Ctrl + U (檢視網頁原始碼)
+        if (e.key === 'U' || e.key === 'u') {
+            e.preventDefault();
+            alert('⚠️ 系統提示：禁止檢視網頁原始碼！');
+            return;
+        }
+
+        // Ctrl + S (儲存網頁)
+        if (e.key === 'S' || e.key === 's') {
+            e.preventDefault();
+            alert('⚠️ 系統提示：本測驗禁止下載或儲存網頁！');
+            return;
+        }
+
+        // Ctrl + P (列印網頁)
+        if (e.key === 'P' || e.key === 'p') {
+            e.preventDefault();
+            alert('⚠️ 系統提示：本測驗禁止列印或匯出 PDF！');
+            return;
+        }
+    }
+});
+// =====================================================================
 <script>
 const originalQuestions = [
     { q: "本廠區的作業範圍不包含以下哪一個區域？", o: ["進倉碼頭卸船區", "穀倉機械塔", "出倉作業區", "遠洋深海捕撈區"], a: 3 },
@@ -273,8 +325,7 @@ let questions = [];
 let currentQuestionIndex = 0;
 let score = 0;
 let timerInterval;
-// ⏰ 修正：考試時間調整為 60 分鐘
-let timeLeft = 60 * 60; 
+let timeLeft = 50 * 60; 
 let cheatCount = 0;
 let currentUser = { name: '', empId: '' };
 
@@ -323,8 +374,7 @@ function startExam() {
     cheatCount = 0;
     currentQuestionIndex = 0;
     score = 0;
-    // ⏰ 修正：重設時間為 60 分鐘
-    timeLeft = 60 * 60; 
+    timeLeft = 50 * 60;
 
     initQuestions();
     
@@ -430,7 +480,7 @@ function submitExam() {
     window.removeEventListener('blur', handleWindowBlur);
 
     const isPass = score >= 70;
-    const resultText = isPass ? '<span class="pass">🎉 恭喜通過測驗！</span>' : '<span class="fail">❌ 未通過測驗，請再接再厲。</span>';
+    const resultText = isPass ? '<span class="pass">恭喜通過測驗！</span>' : '<span class="fail">❌ 未通過測驗，請再接再厲。</span>';
     
     document.getElementById('quizPage').classList.add('hidden');
     document.getElementById('resultPage').classList.remove('hidden');
@@ -487,6 +537,7 @@ function renderAdminRecords() {
     tbody.innerHTML = html;
 }
 
+// ❗ 新增：匯出成績資料成 CSV 的核心 JavaScript 邏輯 ❗
 function exportToCSV() {
     let records = JSON.parse(localStorage.getItem('grain_quiz_records')) || [];
     if (records.length === 0) {
@@ -494,19 +545,25 @@ function exportToCSV() {
         return;
     }
 
+    // 建立 CSV 欄位抬頭
     let csvContent = "姓名,工號,交卷時間,分數,測驗結果,切換視窗次數\n";
 
+    // 填入同仁數據
     records.forEach(r => {
+        // 防止文字內部有逗號導致排版錯亂，使用雙引號包覆
         let row = `"${r.name}","${r.empId}","${r.time}",${r.score},"${r.status}",${r.cheat}`;
         csvContent += row + "\n";
     });
 
+    // 使用 UTF-8 (帶 BOM 標頭 \uFEFF) 下載，確保全中文環境用 Excel 開啟不變亂碼
     let blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
     let url = URL.createObjectURL(blob);
     
+    // 建立隱藏的下載超連結
     let link = document.createElement("a");
     link.setAttribute("href", url);
     
+    // 將檔名預設為「穀倉作業安全測驗成績單_當前日期」
     let dateStr = new Date().toISOString().split('T')[0];
     link.setAttribute("download", `穀倉作業安全測驗成績單_${dateStr}.csv`);
     
