@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>倉儲事業部-新進人員穀倉作業安全測驗</title>
+    <title>東森國際股份有限公司 - 穀倉作業安全測驗系統</title>
     <style>
         :root {
             --primary-color: #0056b3;
@@ -132,9 +132,9 @@
             <h1>穀倉作業一般安全措施及緊急應變測驗</h1>
             <p style="line-height: 1.6; color: #555;">
                 本測驗旨在強化新進同仁對於穀倉作業安全的工安概念。請確實理解文案內容後誠實應考。<br>
-                <b style="color: #333;">測驗規則說明：</b><br>
-                考試時間為 60 分鐘，共有選擇題 50 題，及格成績為 70 分（滿分為 100 分）。<br><br>
-                <b style="color: var(--danger-color);">嚴格防弊機制宣告：</b><br>
+                <b style="color: #333;">📝 測驗說明：</b><br>
+                考試時間為 60 分鐘，共有 50 題，及格成績為 70 分（滿分為 100 分）。<br><br>
+                <b style="color: var(--danger-color);">⚠️ 嚴格防弊機制宣告：</b><br>
                 本測驗已啟用防切換視窗偵測。作答期間<b>切換視窗或離開頁面者，系統將立即判定作弊，強制關閉考試畫面並取消考試資格（成績以 0 分計入後台）。請勿嘗試切換分頁或查詢資料！</b>
             </p>
             <hr>
@@ -144,7 +144,7 @@
             </div>
             <div class="form-group">
                 <label for="empId">員工編號：</label>
-                <input type="text" id="empId" placeholder="請輸入員工編號" required>
+                <input type="text" id="empId" placeholder="請輸入工號" required>
             </div>
             <button class="btn" onclick="startExam()">開始測驗</button>
         </div>
@@ -152,9 +152,10 @@
         <div id="quizPage" class="hidden">
             <div class="meta-info">
                 <span id="displayNav">題目：1 / 50</span>
-                <span id="timer" style="color: var(--danger-color);">剩餘時間：50:00</span>
+                <span id="timer" style="color: var(--danger-color);">剩餘時間：60:00</span>
             </div>
-            <div id="questionContainer"></div>
+            <div id="questionContainer">
+                </div>
             <button class="btn" id="nextBtn" onclick="nextQuestion()">下一題 (送出後不可修改)</button>
         </div>
 
@@ -179,13 +180,13 @@
 
     <div id="adminSection" class="hidden">
         <hr style="margin-top: 40px; border-top: 3px double #0056b3;">
-        <h2>即時後台數據看板</h2>
+        <h2>📊 監考者即時後台數據看板</h2>
         <p>此處顯示所有考生的應考成績紀錄（資料儲存於本地瀏覽器）：</p>
         <table class="admin-table">
             <thead>
                 <tr>
                     <th>姓名</th>
-                    <th>員工編號</th>
+                    <th>工號</th>
                     <th>交卷時間</th>
                     <th>分數</th>
                     <th>結果</th>
@@ -199,7 +200,7 @@
             </tbody>
         </table>
         <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap;">
-            <button class="btn" style="background-color: var(--success-color); margin: 0; flex: 1;" onclick="exportToCSV()">匯出所有成績</button>
+            <button class="btn" style="background-color: var(--success-color); margin: 0; flex: 1;" onclick="exportToCSV()">📥 匯出所有成績為 CSV 檔</button>
             <button class="btn" style="background-color: #6c757d; margin: 0;" onclick="clearRecords()">清除所有後台紀錄</button>
             <button class="btn" style="background-color: #e67e22; margin: 0;" onclick="hideAdminSection()">隱藏後台面板</button>
         </div>
@@ -215,49 +216,6 @@
 </div>
 
 <script>
-// ================= 🚫 防弊鎖定機制：禁止右鍵與常用快捷鍵 =================
-// 1. 禁用滑鼠右鍵選單
-document.addEventListener('contextmenu', function (e) {
-    e.preventDefault();
-    alert('⚠️ 系統提示：本測驗已啟用安全防護，禁用滑鼠右鍵。');
-});
-
-// 2. 禁用特定快捷鍵
-document.addEventListener('keydown', function (e) {
-    const isCtrl = e.ctrlKey || e.metaKey;
-    const isShift = e.shiftKey;
-
-    if (e.key === 'F12') {
-        e.preventDefault();
-        alert('⚠️ 系統提示：禁止開啟開發者工具！');
-        return;
-    }
-
-    if (isCtrl) {
-        if (isShift && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) {
-            e.preventDefault();
-            alert('⚠️ 系統提示：禁止開啟開發者輔助工具！');
-            return;
-        }
-        if (e.key === 'U' || e.key === 'u') {
-            e.preventDefault();
-            alert('⚠️ 系統提示：禁止檢視網網頁原始碼！');
-            return;
-        }
-        if (e.key === 'S' || e.key === 's') {
-            e.preventDefault();
-            alert('⚠️ 系統提示：本測驗禁止下載或儲存網頁！');
-            return;
-        }
-        if (e.key === 'P' || e.key === 'p') {
-            e.preventDefault();
-            alert('⚠️ 系統提示：本測驗禁止列印或匯出 PDF！');
-            return;
-        }
-    }
-});
-// =====================================================================
-
 const originalQuestions = [
     { q: "本廠區的作業範圍不包含以下哪一個區域？", o: ["進倉碼頭卸船區", "穀倉機械塔", "出倉作業區", "遠洋深海捕撈區"], a: 3 },
     { q: "關於「穀倉作業一般安全措施及緊急應變辦法」的修訂與頒佈實施，是由哪一個單位的權責主管負責？", o: ["總公司董事會", "倉儲事業部", "外部消防局", "船務代理公司"], a: 1 },
@@ -294,7 +252,7 @@ const originalQuestions = [
     { q: "進行機械設備檢修時，正確的停機斷電程序順序為何？", o: ["掛籤上鎖→關閉設備電源→關閉現場開關", "關閉設備電源→掛籤上鎖→進行維修", "關閉現場開關→關閉設備電源→掛籤上鎖並確認斷電", "直接進行檢修作業"], a: 2 },
     { q: "機械設備維修確認斷電後，圖控設備指示應改為什麼顏色代表維修中？", o: ["鮮紅色", "桃紅色", "亮綠色", "黃黑色"], a: 1 },
     { q: "同仁進行設備巡查時，配戴何種儀器進行設備運作溫度測定，以及早發現異常？", o: ["熱顯像儀", "瓦斯偵測器", "照度計", "噪音計"], a: 0 },
-    { q: "電氣作業安全衛生規定中，關於維修作業之敘述，何者正確？", o: ["可一邊通電一邊迅速維修(活電作業)", "應斷電進行維修作業，禁止活電作業", "臨時延長線可以使用無防塵插頭", "電氣室高壓電盤檢修不需 any 證照"], a: 1 },
+    { q: "電氣作業安全衛生規定中，關於維修作業之敘述，何者正確？", o: ["可一邊通電一邊迅速維修(活電作業)", "應斷電進行維修作業，禁止活電作業", "臨時延長線可以使用無防塵插頭", "電氣室高壓電盤檢修不需任何證照"], a: 1 },
     { q: "高架作業規定中，高度在幾公尺以上即應配戴背負式安全帶，且扣環應繫於安全母索或固定設備上？", o: ["1 公尺", "1.5 公尺", "2 公尺", "5 公尺"], a: 2 },
     { q: "動火作業開始前，同仁應依據哪一項文件執行環境與施工安全檢點並提出申請？", o: ["每日工作日誌", "財產損耗統計表", "『危險性作業安全檢查申請表』", "防颱動態通報單"], a: 2 },
     { q: "在卸船作業期間，關於船艙口及卸船作業區的動火規定為何？", o: ["只要通風良好即可動火", "不得動火作業", "船長同意就可以動火", "僅限使用噴燈作業"], a: 1 },
@@ -315,7 +273,8 @@ let questions = [];
 let currentQuestionIndex = 0;
 let score = 0;
 let timerInterval;
-let timeLeft = 50 * 60; 
+// ⏰ 修正：考試時間調整為 60 分鐘
+let timeLeft = 60 * 60; 
 let cheatCount = 0;
 let currentUser = { name: '', empId: '' };
 
@@ -357,14 +316,15 @@ function startExam() {
     const name = document.getElementById('username').value.trim();
     const empId = document.getElementById('empId').value.trim();
     if (!name || !empId) {
-        alert('請填寫姓名與員工編號！');
+        alert('請填寫姓名與工號！');
         return;
     }
     currentUser = { name, empId };
     cheatCount = 0;
     currentQuestionIndex = 0;
     score = 0;
-    timeLeft = 50 * 60;
+    // ⏰ 修正：重設時間為 60 分鐘
+    timeLeft = 60 * 60; 
 
     initQuestions();
     
@@ -470,7 +430,7 @@ function submitExam() {
     window.removeEventListener('blur', handleWindowBlur);
 
     const isPass = score >= 70;
-    const resultText = isPass ? '<span class="pass">恭喜通過測驗！</span>' : '<span class="fail">❌ 未通過測驗，請再接再厲。</span>';
+    const resultText = isPass ? '<span class="pass">🎉 恭喜通過測驗！</span>' : '<span class="fail">❌ 未通過測驗，請再接再厲。</span>';
     
     document.getElementById('quizPage').classList.add('hidden');
     document.getElementById('resultPage').classList.remove('hidden');
@@ -534,7 +494,7 @@ function exportToCSV() {
         return;
     }
 
-    let csvContent = "姓名,員工編號,交卷時間,分數,測驗結果,切換視窗次數\n";
+    let csvContent = "姓名,工號,交卷時間,分數,測驗結果,切換視窗次數\n";
 
     records.forEach(r => {
         let row = `"${r.name}","${r.empId}","${r.time}",${r.score},"${r.status}",${r.cheat}`;
