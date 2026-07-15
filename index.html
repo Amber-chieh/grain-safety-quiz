@@ -154,8 +154,7 @@
                 <span id="displayNav">題目：1 / 50</span>
                 <span id="timer" style="color: var(--danger-color);">剩餘時間：50:00</span>
             </div>
-            <div id="questionContainer">
-                </div>
+            <div id="questionContainer"></div>
             <button class="btn" id="nextBtn" onclick="nextQuestion()">下一題 (送出後不可修改)</button>
         </div>
 
@@ -214,6 +213,8 @@
         </div>
     </div>
 </div>
+
+<script>
 // ================= 🚫 防弊鎖定機制：禁止右鍵與常用快捷鍵 =================
 // 1. 禁用滑鼠右鍵選單
 document.addEventListener('contextmenu', function (e) {
@@ -223,12 +224,9 @@ document.addEventListener('contextmenu', function (e) {
 
 // 2. 禁用特定快捷鍵
 document.addEventListener('keydown', function (e) {
-    // 檢查是否按下 Ctrl (Windows) 或 Command (Mac)
     const isCtrl = e.ctrlKey || e.metaKey;
-    // 檢查是否按下 Shift
     const isShift = e.shiftKey;
 
-    // F12 鍵 (直接開啟開發者工具)
     if (e.key === 'F12') {
         e.preventDefault();
         alert('⚠️ 系統提示：禁止開啟開發者工具！');
@@ -236,30 +234,21 @@ document.addEventListener('keydown', function (e) {
     }
 
     if (isCtrl) {
-        // Ctrl + Shift + I (開發者工具)
-        // Ctrl + Shift + J (控制台)
-        // Ctrl + Shift + C (檢查元素)
         if (isShift && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) {
             e.preventDefault();
             alert('⚠️ 系統提示：禁止開啟開發者輔助工具！');
             return;
         }
-
-        // Ctrl + U (檢視網頁原始碼)
         if (e.key === 'U' || e.key === 'u') {
             e.preventDefault();
-            alert('⚠️ 系統提示：禁止檢視網頁原始碼！');
+            alert('⚠️ 系統提示：禁止檢視網網頁原始碼！');
             return;
         }
-
-        // Ctrl + S (儲存網頁)
         if (e.key === 'S' || e.key === 's') {
             e.preventDefault();
             alert('⚠️ 系統提示：本測驗禁止下載或儲存網頁！');
             return;
         }
-
-        // Ctrl + P (列印網頁)
         if (e.key === 'P' || e.key === 'p') {
             e.preventDefault();
             alert('⚠️ 系統提示：本測驗禁止列印或匯出 PDF！');
@@ -268,7 +257,7 @@ document.addEventListener('keydown', function (e) {
     }
 });
 // =====================================================================
-<script>
+
 const originalQuestions = [
     { q: "本廠區的作業範圍不包含以下哪一個區域？", o: ["進倉碼頭卸船區", "穀倉機械塔", "出倉作業區", "遠洋深海捕撈區"], a: 3 },
     { q: "關於「穀倉作業一般安全措施及緊急應變辦法」的修訂與頒佈實施，是由哪一個單位的權責主管負責？", o: ["總公司董事會", "倉儲事業部", "外部消防局", "船務代理公司"], a: 1 },
@@ -305,7 +294,7 @@ const originalQuestions = [
     { q: "進行機械設備檢修時，正確的停機斷電程序順序為何？", o: ["掛籤上鎖→關閉設備電源→關閉現場開關", "關閉設備電源→掛籤上鎖→進行維修", "關閉現場開關→關閉設備電源→掛籤上鎖並確認斷電", "直接進行檢修作業"], a: 2 },
     { q: "機械設備維修確認斷電後，圖控設備指示應改為什麼顏色代表維修中？", o: ["鮮紅色", "桃紅色", "亮綠色", "黃黑色"], a: 1 },
     { q: "同仁進行設備巡查時，配戴何種儀器進行設備運作溫度測定，以及早發現異常？", o: ["熱顯像儀", "瓦斯偵測器", "照度計", "噪音計"], a: 0 },
-    { q: "電氣作業安全衛生規定中，關於維修作業之敘述，何者正確？", o: ["可一邊通電一邊迅速維修(活電作業)", "應斷電進行維修作業，禁止活電作業", "臨時延長線可以使用無防塵插頭", "電氣室高壓電盤檢修不需任何證照"], a: 1 },
+    { q: "電氣作業安全衛生規定中，關於維修作業之敘述，何者正確？", o: ["可一邊通電一邊迅速維修(活電作業)", "應斷電進行維修作業，禁止活電作業", "臨時延長線可以使用無防塵插頭", "電氣室高壓電盤檢修不需 any 證照"], a: 1 },
     { q: "高架作業規定中，高度在幾公尺以上即應配戴背負式安全帶，且扣環應繫於安全母索或固定設備上？", o: ["1 公尺", "1.5 公尺", "2 公尺", "5 公尺"], a: 2 },
     { q: "動火作業開始前，同仁應依據哪一項文件執行環境與施工安全檢點並提出申請？", o: ["每日工作日誌", "財產損耗統計表", "『危險性作業安全檢查申請表』", "防颱動態通報單"], a: 2 },
     { q: "在卸船作業期間，關於船艙口及卸船作業區的動火規定為何？", o: ["只要通風良好即可動火", "不得動火作業", "船長同意就可以動火", "僅限使用噴燈作業"], a: 1 },
@@ -538,7 +527,6 @@ function renderAdminRecords() {
     tbody.innerHTML = html;
 }
 
-// ❗ 新增：匯出成績資料成 CSV 的核心 JavaScript 邏輯 ❗
 function exportToCSV() {
     let records = JSON.parse(localStorage.getItem('grain_quiz_records')) || [];
     if (records.length === 0) {
@@ -546,25 +534,19 @@ function exportToCSV() {
         return;
     }
 
-    // 建立 CSV 欄位抬頭
     let csvContent = "姓名,員工編號,交卷時間,分數,測驗結果,切換視窗次數\n";
 
-    // 填入同仁數據
     records.forEach(r => {
-        // 防止文字內部有逗號導致排版錯亂，使用雙引號包覆
         let row = `"${r.name}","${r.empId}","${r.time}",${r.score},"${r.status}",${r.cheat}`;
         csvContent += row + "\n";
     });
 
-    // 使用 UTF-8 (帶 BOM 標頭 \uFEFF) 下載，確保全中文環境用 Excel 開啟不變亂碼
     let blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
     let url = URL.createObjectURL(blob);
     
-    // 建立隱藏的下載超連結
     let link = document.createElement("a");
     link.setAttribute("href", url);
     
-    // 將檔名預設為「穀倉作業安全測驗成績單_當前日期」
     let dateStr = new Date().toISOString().split('T')[0];
     link.setAttribute("download", `穀倉作業安全測驗成績單_${dateStr}.csv`);
     
